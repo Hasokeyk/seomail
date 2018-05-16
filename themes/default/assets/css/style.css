@@ -1,0 +1,38 @@
+/** * Main CSS v1.0.0 */
+@font-face{font-family:Montserrat-Medium;src:url(../fonts/Montserrat-Medium.eot?#iefix) format('embedded-opentype'),url(../fonts/Montserrat-Medium.otf) format('opentype'),url(../fonts/Montserrat-Medium.woff) format('woff'),url(../fonts/Montserrat-Medium.ttf) format('truetype'),url(../fonts/Montserrat-Medium.svg#Montserrat-Medium) format('svg');font-weight:400;font-style:normal}@font-face{font-family:Montserrat-Light;src:url(../fonts/Montserrat-Light.eot?#iefix) format('embedded-opentype'),url(../fonts/Montserrat-Light.otf) format('opentype'),url(../fonts/Montserrat-Light.woff) format('woff'),url(../fonts/Montserrat-Light.ttf) format('truetype'),url(../fonts/Montserrat-Light.svg#Montserrat-Light) format('svg');font-weight:400;font-style:normal}@font-face{font-family:Montserrat-Bold;src:url(../fonts/Montserrat-Bold.eot?#iefix) format('embedded-opentype'),url(../fonts/Montserrat-Bold.otf) format('opentype'),url(../fonts/Montserrat-Bold.woff) format('woff'),url(../fonts/Montserrat-Bold.ttf) format('truetype'),url(../fonts/Montserrat-Bold.svg#Montserrat-Bold) format('svg');font-weight:400;font-style:normal}body{min-width:320px;background:#fff;font:14px/16px Montserrat-Medium;box-sizing:border-box;overflow-y:scroll}
+body,html{margin:0;padding:0; font-family:'Montserrat-Medium',sans-serif;}
+body{width:100%;height:100%}
+html{width:100%;height:100%}
+h1,h2,h3,h4,h5,h6,li,p,ul{list-style:none;margin:0;padding:0}
+a,a:hover{text-decoration:none}:focus{outline:0}
+
+/* ÜST KISIM */
+.ust-kisim{
+	font-size:20px;
+	border-bottom:2px solid #eee;
+}
+/* ÜST KISIM */
+
+/* SİDEBAR */
+.sidebar{
+	float:left; width:15%; height:100%; border-right:2px solid #eee;
+}.sidebar ul{
+	float:left; width:100%;
+}.sidebar ul li{
+	float:left; width:100%;
+}.sidebar ul li a{
+	float:left; width:100%; padding:10px;
+}.sidebar ul li ul{
+	float:left; width:100%;
+}.sidebar ul li strong{
+	float:left; width:100%; padding:10px; border-bottom:2px solid #eee;
+	font:15px/15px Montserrat-Medium;
+}.sidebar ul li ul li{
+	float:left; width:100%;
+}.sidebar ul li ul li a{
+	float:left; width:100%; font:15px/15px Montserrat-Light;
+	color:#414141;
+}.sidebar ul li ul li a:hover{
+	background:#eee;
+}
+/* SİDEBAR */

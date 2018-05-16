@@ -11,7 +11,7 @@
 	ini_set('display_errors', 1);
     
     global $mysqli;
-	$mysqli = new mysqli('localhost','insta4li_iuser','48186hasokeyk','insta4li_db');
+	$mysqli = new mysqli('localhost','root','','seomail');
 	
 	if($mysqli->connect_error){
 		exit;
@@ -27,12 +27,12 @@
     define('SAYFALAR',ROOT.'/sayfalar/');
     define('ONKLASOR',null);
     define('SITEADRESI','seomail.com'.ONKLASOR);
+    define('SITEURL','http://'.SITEADRESI.'/'.ONKLASOR);
     define('TEMAYOLU','//'.SITEADRESI.'/themes/'.TEMAADI);
     //GEREKLİ DEĞİŞKENLER
     
     //ANA CLASS
     require KEYB."fonksiyonlar.class.php";
-    $ksession = 'seomail';
 	if(class_exists('keybmin')){
-		$keybmin = new keybmin($ksession);
+		$keybmin = new keybmin('seomail');
 	}

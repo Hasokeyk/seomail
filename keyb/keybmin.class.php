@@ -23,93 +23,46 @@
 	class keybmin{
 		
 		public $session = null;
-		public $sayfa = 'home';
-		public $title = 'Sayfa Başlığı Yok';
-		public $description = 'Sayfa Açıklaması Yok';
-		public $canonical = 'https://'.SITEADRESI;
-		public $exInfo = [];
-		public $dilOlustur = [];
-		public $linkEx = [];
-		public $linker = [];
+		public $page = 'login';
 		
 		function __construct($session){
 			global $mysqli;
             
-			$fullLink = parse_url($_SERVER['SCRIPT_URI']);
-            $linkEx = ($fullLink['path'] == '/')?null:explode('/',$fullLink['path']);
-            
-            if($linkEx != null){
-                $linkEx = array_filter($linkEx, create_function('$value', 'return $value !== "";'));
-                $linkEx = array_values($linkEx);
-            }
-            $this->linkEx = $linkEx;
-            
-            //print_r($linkEx);
-            if($linkEx == null){
-				$this->title = $this->getSetting('homeTitle');
-                $this->description = $this->getSetting('homeDesc');
-                $this->sayfa = 'home';
-            }else{
-                
-                $linkExLast  = end($linkEx);
-                $url = $this->findParenUrl($linkExLast,'link');
-                if($url !== false){
-                    
-                    $first = current($this->linker);
-                    $last  = end($this->linker);
-                    
-                    $link = null;
-                    foreach($this->linker as $l){
-                        $link .= $l['link'].'/';
-                    }
-                    
-                    $linkControl = null;
-                    foreach($this->linker as $l){
-                        $linkControl[] = $l['link'];
-                    }
-                    
-                    $fark = array_diff($linkControl,$linkEx);
-                    if($fark != null){
-                        
-                        header("HTTP/1.1 301 Moved Permanently");
-                        header("Location: https://".SITEADRESI.'/'.$link); 
-                        exit();
-                        
-                    }else{
-                        $this->sayfa = $last['template'];
-                        
-                        $t = [
-                            'template' => $last['template'],
-                            'text' => $last['title'],
-                            'link' => $last['link'],
-                            'parentLink' => $linkControl[1],
-                        ];
-                        $d = [
-                            'template' => $last['template'],
-                            'text' => $last['description'],
-                            'link' => $last['link'],
-                            'parentLink' => $linkControl[1],
-                        ];
-                        $this->title = $this->seoConvert($t);
-                        $this->description = $this->seoConvert($d);
-                        $this->canonical = "https://".SITEADRESI.'/'.$link;
-                    }
-                    
-                }else{
-					$this->linkEx = $linkEx;
-                    $this->sayfa = '404';
-                }
-                
-            }
+			$this->session = $session;
 			
-			//SAYFANIN YOK İSE 404 DÜŞSÜN
-			if(!file_exists(TEMAKLASORU.$this->sayfa.'.php')){
-				$this->sayfa = '404';
+			$get = $this->getGuvenlik();
+			extract($get);
+			$post = $this->postGuvenlik();
+			extract($post);
+			
+			//KURULUMUŞ MU?
+			$settings = $mysqli->query("SELECT * FROM settings WHERE var = 'install'")->num_rows;
+			if($settings == 0){
+				header('Location: '.SITEURL.'install/');
 			}
-			//SAYFANIN YOK İSE 404 DÜŞSÜN
+			//KURULUMUŞ MU?
 			
-			require TEMAKLASORU.$this->sayfa.'.php';
-			space:
+			//ÜYE GİRİŞ YAPMIŞ MI?
+			if($this->girisKontrol()){
+				
+				if(isset($rpage) and !empty($rpage)){
+					$this->page = $rpage;
+				}else{
+					$this->page = 'home';
+				}
+				
+			}else{
+				$this->page = 'login';
+			}
+			//ÜYE GİRİŞ YAPMIŞ MI?
+			
+			//SAYFA VAR MI?
+			if(!file_exists(TEMAKLASORU.$this->page.'.php')){
+				$this->page = '404';
+			}
+			//SAYFA VAR MI?
+						
+			require TEMAKLASORU.$this->page.'.php';
 		}
 		
 		function girisKontrol(){
@@ -118,7 +71,7 @@
 			
 			if(isset($_SESSION[$this->session]['session']) and !empty($_SESSION[$this->session]['session'])){
 				
-				$sessionsor = $mysqli->query("SELECT * FROM personel WHERE session='".$_SESSION[$this->session]['session']."'");
+				$sessionsor = $mysqli->query("SELECT * FROM uyeler WHERE session='".$_SESSION[$this->session]['session']."'");
 				if($sessionsor->num_rows > 0){
 					return true;
 				}else{
@@ -127,16 +80,18 @@
 					return false; //GEÇİÇİ OLARAK TRUE YAPTIM
 				}
 				
+			}else{
+				return false;
 			}
 			
 			//return true;
 			
 		}
 		
-		function getGuvenlik($get){
+		function getGuvenlik(){
 			global $mysqli;
 			$degerler = array();
-			foreach($get as $p => $d){
+			foreach($_GET as $p => $d){
 				if(is_string($_GET[$p]) === true){
 					$degerler[$p] = trim(strip_tags($mysqli->escape_string($d)));
 				}
@@ -144,10 +99,10 @@
 			return $degerler;
 		}
 		
-		function postGuvenlik($post){
+		function postGuvenlik(){
 			global $mysqli;
 			$degerler = array();
-			foreach($post as $p => $d){
+			foreach($_POST as $p => $d){
 				if(is_string($_POST[$p]) === true){
 					$degerler[$p] = trim(strip_tags($mysqli->escape_string($d)));
 				}

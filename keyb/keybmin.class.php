@@ -36,7 +36,7 @@
 			extract($post);
 			
 			//KURULUMUŞ MU?
-			$settings = $mysqli->query("SELECT * FROM settings WHERE var = 'install'")->num_rows;
+			$settings = $mysqli->query("SELECT * FROM ayarlar WHERE var = 'install'")->num_rows;
 			if($settings == 0){
 				header('Location: '.SITEURL.'install/');
 			}
@@ -45,8 +45,8 @@
 			//ÜYE GİRİŞ YAPMIŞ MI?
 			if($this->girisKontrol()){
 				
-				if(isset($rpage) and !empty($rpage)){
-					$this->page = $rpage;
+				if(isset($page) and !empty($page)){
+					$this->page = $page;
 				}else{
 					$this->page = 'home';
 				}
